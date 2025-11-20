@@ -62,14 +62,17 @@ class BrainCNN(nn.Module):
         super(BrainCNN, self).__init__()
         self.features = nn.Sequential(
             nn.Conv2d(3, 32, kernel_size=3, padding=1),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(2),   # 128 -> 64
 
             nn.Conv2d(32, 64, kernel_size=3, padding=1),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(2),   # 64 -> 32
 
             nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(2),   # 32 -> 16
         )
@@ -89,7 +92,7 @@ class BrainCNN(nn.Module):
 model = BrainCNN(num_classes=num_classes).to(device)
 print(model)
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=1e-4)
+optimizer = optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-5)
 """Training and Validation loop"""
 def train_one_epoch(model, loader, optimizer, criterion, device):
     model.train()
